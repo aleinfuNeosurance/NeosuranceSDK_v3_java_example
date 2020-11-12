@@ -1,0 +1,102 @@
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+<style>
+@font-face
+{
+    font-family: 'Ubuntu-Bold';
+    src: local('Ubuntu-Bold'),url('fonts/Ubuntu/Ubuntu-Bold.ttf') format('truetype');
+}
+@font-face
+{
+    font-family: 'Ubuntu-Regular';
+    src: local('Ubuntu-Regular'),url('fonts/Ubuntu/Ubuntu-Regular.ttf') format('truetype');
+}
+@font-face
+{
+    font-family: 'Ubuntu-Light';
+    src: local('Ubuntu-Light'),url('fonts/Ubuntu/Ubuntu-Light.ttf') format('truetype');
+}
+body {
+    font-family:'Ubuntu-Light';
+}
+.communities-title{
+    padding-top: 20px;
+    font-size:20px;
+    font-family:'Ubuntu-Bold';
+}
+.communities-title-class{
+    text-align: left;
+    margin: 0px;
+    padding: 6px 10px;
+    font-size: 18px;
+    width: 100%;
+    font-family: 'Ubuntu-Regular';
+}
+.communities-title-class span{
+    text-align: left;
+    margin: 0px;
+    padding: 6px 10px;
+    font-size: 18px;
+    width: 100%;
+    font-family: 'Ubuntu-Light';
+}
+button {
+	font-family: 'Ubuntu-Bold';
+    margin: 10px;
+    padding: 10px;
+    font-size: 18px;
+    width: 75%;
+    border-radius: 10px;
+    border: 2px solid #000000;
+    margin-top: 5px;
+    color: #ffffff;
+    background-color: #6200EE;
+}
+button:active {
+	border-style: inset;
+    border: 2px solid #000000;
+    color: #ffffff;
+    background-color: #BB86FC;
+}
+
+button:focus {
+    outline: -webkit-focus-ring-color auto 0px !important;
+}
+</style>
+<script>
+	function exec(what) {
+		app.postMessage(JSON.stringify({
+			what : what
+		}))
+	}
+</script>
+</head>
+<body>
+	<center>
+		<p class="communities-title">NSR SDK JavaExample</p>
+		<p class="communities-title-class">NeosuranceSDK: <span>NeosuranceSDK_v3_java</span></p>
+		<p class="communities-title-class">User: <span>mario@rossi.com</span></p>
+		<br>
+		<button onclick="exec('setup')">Setup</button>
+		<br>
+		<button onclick="exec('registerUser')">RegisterUser</button>
+		<br>
+		<button onclick="exec('forgetUser')">ForgetUser</button>
+		<br>
+		<button onclick="exec('showApp')">ShowApp</button>
+		<br>
+		<button onclick="exec('sendEvent')">SendEvent: OnDemand</button>
+		<br>
+		<button onclick="exec('sendEventPush')">SendEvent: Push Notification</button>
+		<br>
+		<button onclick="exec('appLogin')">AppLogin</button>
+		<br>
+		<button onclick="exec('appPayment')">AppPayment</button>
+		<br>
+		<button onclick="exec('resetCruncher')">ResetCruncher</button>
+		<br>
+	</center>
+</body>
+</html>
