@@ -15,6 +15,7 @@ import org.json.JSONObject;
 import java.util.Properties;
 
 import eu.nsrsdk.v3java.NSR;
+import eu.nsrsdk.v3java.NSRSecurityResponse;
 import eu.nsrsdk.v3java.NSRSettings;
 import eu.nsrsdk.v3java.NSRUser;
 
@@ -101,6 +102,23 @@ public class MainActivity extends AppCompatActivity {
                 if ("resetCruncher".equals(what)) {
                     NSR.getInstance(this).resetCruncher();
                 }
+                if ("closeView".equals(what)) {
+                    NSR.getInstance(this).closeView();
+                }
+                if ("policies".equals(what)) {
+                    JSONObject criteria = new JSONObject();
+                    criteria.put("available",true);
+                    NSR.getInstance(this).policies(criteria, new NSRSecurityResponse() {
+                        public void completionHandler(JSONObject json, String error) throws Exception {
+                            if (error == null) {
+                                Log.d(TAG, "policies response");
+                                Log.d(TAG, json.toString());
+                            } else {
+                                Log.e(TAG, "policies error: " + error);
+                            }
+                        }
+                    });
+                }
             }
         } catch (Exception e) {
         }
@@ -109,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void registerUser() {
 
-        Toast.makeText(getApplicationContext(), "register user...", Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(), "register user...", Toast.LENGTH_LONG).show();
 
         try {
             Log.d(TAG, "registerUser");
@@ -119,12 +137,19 @@ public class MainActivity extends AppCompatActivity {
             user.setFirstname(config.getProperty("user.firstname"));
             user.setLastname(config.getProperty("user.lastname"));
 
+            user.setAddress(config.getProperty("user.address"));
+            user.setZipCode(config.getProperty("user.cap"));
+            user.setCity(config.getProperty("user.city"));
+            user.setStateProvince(config.getProperty("user.province"));
+            user.setFiscalCode(config.getProperty("user.fiscalcode"));
+
+
             JSONObject locals = new JSONObject();
             locals.put("email",config.getProperty("user.email"));
             locals.put("code",config.getProperty("user.code"));
             locals.put("firstName",config.getProperty("user.firstname"));
             locals.put("lastName",config.getProperty("user.lastname"));
-            user.setLocals(locals);
+            //user.setLocals(locals);
 
             NSR.getInstance(this).registerUser(user);
         } catch (Exception e) {
@@ -138,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void sendEvent() {
 
-        Toast.makeText(getApplicationContext(), "sending event on demand...", Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(), "sending event on demand...", Toast.LENGTH_LONG).show();
 
         try {
             Log.d(TAG, "sendEvent: ondemand");
@@ -151,11 +176,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void sendEventPush() {
 
-        Toast.makeText(getApplicationContext(), "sending event push notification...", Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(), "sending event push notification...", Toast.LENGTH_LONG).show();
 
         try {
-            Log.d(TAG, "sendEvent: testpush");
-            String eventName = "testpush";
+            Log.d(TAG, "sendEvent: inpoi"); //testpush
+            String eventName = "inpoi"; //"testpush";
             NSR.getInstance(this).sendEvent(eventName,new JSONObject());
         } catch (Exception e) {
             Log.e(TAG, "sendEventPush", e);
@@ -170,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
     public void setup() {
         Log.d(TAG, "setup");
 
-        Toast.makeText(getApplicationContext(), "Setup...", Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(), "Setup...", Toast.LENGTH_LONG).show();
 
         NSRSettings settings = new NSRSettings();
         settings.setDisableLog(false);

@@ -10,8 +10,8 @@ android {
         applicationId "eu.nsrsdk.javaexample"
         minSdkVersion 24
         targetSdkVersion 30
-        versionCode 4
-        versionName "3.0.4"
+        versionCode 5
+        versionName "3.0.6"
     }
 
     buildTypes {
@@ -30,5 +30,5 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation 'com.github.neosurance:NeosuranceSDK_v3_java:3.0.22'
+    implementation 'com.github.neosurance:NeosuranceSDK_v3_java:3.1.0'
 }

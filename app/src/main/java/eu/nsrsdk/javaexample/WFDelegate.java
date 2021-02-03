@@ -44,6 +44,11 @@ public class WFDelegate implements NSRWorkflowDelegate {
 		}
 	}
 
+	@Override
+	public void goTo(final Context ctx, final String area) {
+		Log.d(TAG, "goTo: " + area);
+	}
+
 	public static void setData(Context ctx, String key, String value) {
 		SharedPreferences sp = ctx.getSharedPreferences("NSRSample", Application.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sp.edit();
