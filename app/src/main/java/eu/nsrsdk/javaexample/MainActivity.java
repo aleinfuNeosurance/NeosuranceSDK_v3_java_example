@@ -1,10 +1,16 @@
 package eu.nsrsdk.javaexample;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Base64;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
@@ -12,7 +18,14 @@ import android.widget.Toast;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 
 import eu.nsrsdk.v3java.NSR;
 import eu.nsrsdk.v3java.NSRSecurityResponse;
@@ -47,8 +60,8 @@ public class MainActivity extends AppCompatActivity {
 
             setContentView(mainView);
             mainView.loadUrl("file:///android_asset/sample.html");
-
             setup();
+            //mainView.loadUrl("https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/capture");
         } catch (Exception e) {
             Log.e(TAG,e.getMessage());
         }
@@ -152,6 +165,10 @@ public class MainActivity extends AppCompatActivity {
             //user.setLocals(locals);
 
             NSR.getInstance(this).registerUser(user);
+
+            if(Build.VERSION.SDK_INT >= 30)
+                MainActivity.askPermissionsBackground(this);
+
         } catch (Exception e) {
         }
     }
@@ -206,7 +223,76 @@ public class MainActivity extends AppCompatActivity {
         settings.setPushIcon(R.drawable.king);
         settings.setWorkflowDelegate(new WFDelegate(),getApplicationContext());
         NSR.getInstance(this).setup(settings,new JSONObject());
-        NSR.getInstance(this).askPermissions(this);
+
+        if(Build.VERSION.SDK_INT >= 30)
+            MainActivity.askPermissions(this);
+        else
+            NSR.getInstance(this).askPermissions(this);
+    }
+
+    public static void askPermissionsBackground(Activity activity) {
+        setData("permission_requested", "*", activity.getApplicationContext());
+        List<String> permissionsList = new ArrayList();
+
+
+        if (ActivityCompat.checkSelfPermission(activity.getApplicationContext(), "android.permission.ACCESS_BACKGROUND_LOCATION") != 0) {
+            permissionsList.add("android.permission.ACCESS_BACKGROUND_LOCATION");
+        }
+
+        if (permissionsList.size() > 0) {
+            ActivityCompat.requestPermissions(activity, (String[])permissionsList.toArray(new String[permissionsList.size()]), 8259);
+        }
+
+    }
+
+    public static void askPermissions(Activity activity) {
+        setData("permission_requested", "*", activity.getApplicationContext());
+        List<String> permissionsList = new ArrayList();
+        if (ActivityCompat.checkSelfPermission(activity.getApplicationContext(), "android.permission.ACCESS_FINE_LOCATION") != 0) {
+            permissionsList.add("android.permission.ACCESS_FINE_LOCATION");
+        }
+
+        if (ActivityCompat.checkSelfPermission(activity.getApplicationContext(), "android.permission.ACCESS_COARSE_LOCATION") != 0) {
+            permissionsList.add("android.permission.ACCESS_COARSE_LOCATION");
+        }
+
+        /*
+        if (ActivityCompat.checkSelfPermission(activity.getApplicationContext(), "android.permission.ACCESS_BACKGROUND_LOCATION") != 0) {
+            permissionsList.add("android.permission.ACCESS_BACKGROUND_LOCATION");
+        }
+         */
+
+        if (permissionsList.size() > 0) {
+            ActivityCompat.requestPermissions(activity, (String[])permissionsList.toArray(new String[permissionsList.size()]), 8259);
+        }
+
+    }
+
+    public static SharedPreferences getSharedPreferences(Context ctx) {
+        return ctx.getSharedPreferences("NSRSDK", 0);
+    }
+
+    private static final byte[] K = Base64.decode("Ux44AGRuanL0y7qQDeasT3", 2);
+    private static final byte[] I = Base64.decode("ycB4AGR7a0fhoFXbpoHy43", 2);
+
+    public static String toe(String input) throws Exception {
+        Cipher cipher = Cipher.getInstance("AES/CTR/NoPadding");
+        cipher.init(1, new SecretKeySpec(Arrays.copyOf(K, 16), "AES"), new IvParameterSpec(Arrays.copyOf(I, 16)));
+        return Base64.encodeToString(cipher.doFinal(input.getBytes()), 2);
+    }
+
+    public static void setData(String key, String value, Context ctx) {
+        SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
+        if (value != null) {
+            try {
+                editor.putString(key, toe(value));
+            } catch (Exception var5) {
+            }
+        } else {
+            editor.remove(key);
+        }
+
+        editor.commit();
     }
 
     public void appLogin() {
