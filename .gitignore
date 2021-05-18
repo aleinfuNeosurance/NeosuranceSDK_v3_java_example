@@ -13,5 +13,5 @@
 .externalNativeBuild
 .cxx
 #local.properties
-/config.properties
-config.properties
+#/config.properties
+#config.properties

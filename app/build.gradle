@@ -10,8 +10,8 @@ android {
         applicationId "eu.nsrsdk.javaexample"
         minSdkVersion 24
         targetSdkVersion 30
-        versionCode 7
-        versionName "3.0.7"
+        versionCode 10
+        versionName "3.0.10"
     }
 
     buildTypes {
