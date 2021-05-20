@@ -3,13 +3,13 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "28.0.3" //"30.0.2"
+    compileSdkVersion 27 //30
+    buildToolsVersion "27.0.1" //"30.0.2"
 
     defaultConfig {
         applicationId "eu.nsrsdk.javaexample"
         minSdkVersion 24
-        targetSdkVersion 30
+        targetSdkVersion 27 //30
         versionCode 10
         versionName "3.0.10"
     }
